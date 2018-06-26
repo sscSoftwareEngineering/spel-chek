@@ -5,14 +5,15 @@
  */
 package spelChek;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SpelCheckCLI {
     public static void main(String[] args) {
         final String PATH = System.getProperty("user.dir") + '\\';
-        ArrayList<String> input = new ArrayList<>();
-        ArrayList<String> dict = new ArrayList<>();
+        ArrayList<String> input;
+        ArrayList<String> dict;
         ArrayList<String> unknown;
         Scanner in = new Scanner(System.in);
         
@@ -42,12 +43,11 @@ public class SpelCheckCLI {
             for (String item : unknown) {
                 System.out.println(item + " is an unknown word");
             }
-        } catch (Exception ex) {
-            System.out.println("There was an error running the program.");
+        } catch (FileNotFoundException ex) {
+            System.out.println("Error: Could not find " + dataFile);
+            System.out.println("Please enter the full file path "
+                    + "or put the file in the following directory:");
+            System.out.println(PATH);
         }
-
-        
-        
-        
     }
 }
