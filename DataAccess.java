@@ -11,24 +11,31 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataAccess {
-    public ArrayList<String> loadData(String path, String file) throws Exception {
-        ArrayList<String> output = new ArrayList<>();
-        File f = new File(file);
+    
+    public ArrayList<String> loadData(String path, String fileName) throws FileNotFoundException {
+        File f = new File(fileName);
         if(!f.isFile()) {
-            f = new File(path + file);
+            f = new File(path + fileName);
         }
-        try {
-            Scanner s = new Scanner(f);
+        if(!f.isFile()) {
+            f = new File(path + fileName);
+        } else {
+            throw new FileNotFoundException();
+        }
+        return chop(f);
+    }
+    
+    public ArrayList<String> loadData(File file) throws FileNotFoundException {
+        return chop(file);
+    }
+    
+    private ArrayList<String> chop(File file) throws FileNotFoundException {
+        ArrayList<String> output = new ArrayList<>();
+
+        try (Scanner s = new Scanner(file)) {
             while(s.hasNext()) {
                 output.add(s.next());
             }
-            s.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("Error: Could not find " + file);
-            System.out.println("Please enter the full file path "
-                    + "or put the file in the following directory:");
-            System.out.println(path);
-            throw new Exception(ex);
         }
         
         return output;
