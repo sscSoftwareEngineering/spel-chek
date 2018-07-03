@@ -17,11 +17,6 @@ public class DataAccess {
         if(!f.isFile()) {
             f = new File(path + fileName);
         }
-        if(!f.isFile()) {
-            f = new File(path + fileName);
-        } else {
-            throw new FileNotFoundException();
-        }
         return chop(f);
     }
     
