@@ -1,12 +1,17 @@
 /*
  * AUTHOR:  William Cordero
  * DATE:    05/2018
- * PURPOSE: Access text files and convert to ArrayLists
+ * PURPOSE: Access text files or databases and convert to ArrayLists
  */
 package spelChek;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,6 +29,18 @@ public class DataAccess {
         return chop(file);
     }
     
+    public static ArrayList<String> loadData(Connection conn) throws SQLException, ClassNotFoundException {
+        ArrayList<String> output = new ArrayList<>();
+        PreparedStatement statement = conn.prepareStatement("select * from spelling.word");
+        
+        ResultSet result = statement.executeQuery();
+        while(result.next()){
+            output.add(result.getString(1));
+        }
+        
+        return output;
+    }
+    
     private ArrayList<String> chop(File file) throws FileNotFoundException {
         ArrayList<String> output = new ArrayList<>();
 
@@ -34,5 +51,12 @@ public class DataAccess {
         }
         
         return output;
+    }
+    
+    public static Connection getConnection(String user, String pass) throws SQLException, ClassNotFoundException {
+        String sqlURL = "jdbc:mysql://localhost:3306/spelling";
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(sqlURL, user, pass);
+        return conn;
     }
 }
